@@ -4,7 +4,7 @@ import com.google.common.base.Joiner;
 import java.util.Arrays;
 
 @SuppressWarnings("java:S106")
-public class App {
+public class Hw01 {
     public static void main(String... args) {
         String forPrint = Joiner.on(", ").join(Arrays.asList("Денис", "Роман", "Матвей"));
         System.out.println(forPrint);
