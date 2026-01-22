@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation ("com.google.guava:guava")
+    implementation ("com.google.guava:guava:33.5.0-jre")
 }
 
 tasks {
