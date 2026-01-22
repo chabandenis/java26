@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation ("com.google.guava:guava:33.5.0-jre")
+    implementation ("com.google.guava:guava")
 }
 
 tasks {
@@ -14,7 +14,7 @@ tasks {
         archiveVersion.set("0.1")
         archiveClassifier.set("")
         manifest {
-            attributes(mapOf("Main-Class" to "ru.otus.Hw01"))
+            attributes(mapOf("Main-Class" to "ru.otus.HelloOtus"))
         }
     }
 
