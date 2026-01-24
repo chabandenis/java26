@@ -1,7 +1,5 @@
 package homework;
 
-import java.util.Objects;
-
 // @SuppressWarnings({"java:S1135"}) // при выполнении ДЗ эту аннотацию надо удалить
 public class Customer implements Comparable<Customer> {
     private final long id;
@@ -54,7 +52,7 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public int compareTo(Customer other) {
-        //return this.id>other.id ? 1 : this.id < other.id ? -1 : 0; // сравнение по полю id
+        // return this.id>other.id ? 1 : this.id < other.id ? -1 : 0; // сравнение по полю id
         // или так:
         return Long.compare(this.scores, other.scores); // сравнение по полю idother.id; // сравнение по полю id
     }
