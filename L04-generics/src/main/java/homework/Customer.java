@@ -6,8 +6,6 @@ public class Customer implements Comparable<Customer> {
     private String name;
     private long scores;
 
-    // todo: 1. в этом классе надо исправить ошибки
-
     public Customer(long id, String name, long scores) {
         this.id = id;
         this.name = name;
@@ -52,8 +50,6 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public int compareTo(Customer other) {
-        // return this.id>other.id ? 1 : this.id < other.id ? -1 : 0; // сравнение по полю id
-        // или так:
         return Long.compare(this.scores, other.scores); // сравнение по полю idother.id; // сравнение по полю id
     }
 

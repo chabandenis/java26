@@ -28,6 +28,10 @@ public class CustomerService {
 
         Map.Entry<Customer, String> max = map.higherEntry(customer);
 
+        if (max == null) {
+            return null;
+        }
+
         Map.Entry<Customer, String> entry = new AbstractMap.SimpleEntry<>(
                 new Customer(
                         max.getKey().getId(),
