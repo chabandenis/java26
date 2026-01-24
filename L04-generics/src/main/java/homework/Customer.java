@@ -44,8 +44,12 @@ public class Customer implements Comparable<Customer> {
 
         Customer customer = (Customer) o;
 
-        if (id == customer.id) return true;
-        return false;
+        boolean retValue = false;
+
+        if (id == customer.id) {
+            retValue = true;
+        }
+        return retValue;
     }
 
     @Override
@@ -55,7 +59,6 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public int hashCode() {
-        int result = Long.hashCode(id);
-        return result;
+        return Long.hashCode(id);
     }
 }
