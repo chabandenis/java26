@@ -34,8 +34,4 @@ public class TestMe {
         log.debug("\t\t *** Code of function three");
     }
 
-    @Override
-    public String toString() {
-        return "TestMe{}";
-    }
 }

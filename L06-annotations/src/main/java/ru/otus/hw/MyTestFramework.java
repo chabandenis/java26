@@ -18,6 +18,7 @@ public class MyTestFramework {
     private List<Method> methodsForTest;
     private List<Method> afterList;
     private Object instance;
+    private Class<?> clazz;
 
     private static final Logger log = LoggerFactory.getLogger(MyTestFramework.class);
 
@@ -33,16 +34,12 @@ public class MyTestFramework {
     }
 
     void init(String aClass) {
-        Class<?> clazz = null;
         try {
             clazz = Class.forName(aClass);
         } catch (ClassNotFoundException e) {
             log.error("Ошибка для класса {}, {}", aClass, e);
             throw new RuntimeException(e);
         }
-
-        // создать экземпляр после тестируемого класса
-        instance = createObj(clazz);
 
         // список методов для тестирования
         methodsForTest = getMethodsForTest(clazz);
@@ -64,6 +61,9 @@ public class MyTestFramework {
     // обработка тестового метода
     void doTest(Method method) {
         log.info("======================");
+
+        // создать экземпляр после тестируемого класса
+        instance = createObj(clazz);
 
         // подготовительное окружение
         dosBefore();
