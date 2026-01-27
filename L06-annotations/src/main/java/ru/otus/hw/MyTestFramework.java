@@ -19,6 +19,7 @@ public class MyTestFramework {
     private List<Method> afterList;
     private Object instance;
     private Class<?> clazz;
+    private Result result = new Result();
 
     private static final Logger log = LoggerFactory.getLogger(MyTestFramework.class);
 
@@ -31,9 +32,15 @@ public class MyTestFramework {
         // выполнить тестирование
         doTests();
 
+        // результаты
+        log.info(result.toString());
+
     }
 
     private void init(String aClass) {
+        // обнулить результаты тестов
+        result.clearResult();
+
         try {
             clazz = Class.forName(aClass);
         } catch (ClassNotFoundException e) {
@@ -80,7 +87,12 @@ public class MyTestFramework {
                 throw new RuntimeException(e);
             }
 
+            // успешный тест
+            result.incPassed();
+
         } catch (RuntimeException e) {
+            // ошибочный тест
+            result.incFailed();
             log.info("!!! Ошибка при выполнении метода {}", method.getName(), e);
         }
 
@@ -165,5 +177,32 @@ public class MyTestFramework {
             throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
         MyTestFramework test = new MyTestFramework();
         test.doTest("ru.otus.hw.TestMe");
+    }
+}
+
+class Result {
+    private int passed;
+    private int failed;
+
+    public void incPassed() {
+        this.passed++;
+    }
+
+    public void incFailed() {
+        this.failed++;
+    }
+
+    public void clearResult() {
+        this.failed = 0;
+        this.passed = 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Result {" +
+                "passed=" + passed +
+                ", failed=" + failed +
+                ", total=" + (failed + passed) +
+                '}';
     }
 }
