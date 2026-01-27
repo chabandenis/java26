@@ -32,6 +32,7 @@ public class TestMe {
     @Test
     public void functionThree() {
         log.debug("\t\t *** Code of function three");
+        throw new RuntimeException("Принудительная остановка");
     }
 
 }

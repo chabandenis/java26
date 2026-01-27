@@ -33,7 +33,7 @@ public class MyTestFramework {
 
     }
 
-    void init(String aClass) {
+    private void init(String aClass) {
         try {
             clazz = Class.forName(aClass);
         } catch (ClassNotFoundException e) {
@@ -53,91 +53,98 @@ public class MyTestFramework {
     }
 
     // обработка тестовых методов
-    void doTests() {
+    private void doTests() {
         methodsForTest.stream()
                 .forEach(x -> doTest(x));
     }
 
     // обработка тестового метода
-    void doTest(Method method) {
+    private void doTest(Method method) {
         log.info("======================");
 
-        // создать экземпляр после тестируемого класса
-        instance = createObj(clazz);
-
-        // подготовительное окружение
-        dosBefore();
-
         try {
-            method.invoke(instance);
-            log.info("Выполнен метод {}", method);
-        } catch (IllegalAccessException e) {
-            log.error("Ошибка выполнения метода {}, {}", method, e);
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            log.error("Ошибка выполнения метода {}, {}", method, e);
-            throw new RuntimeException(e);
+            // создать экземпляр после тестируемого класса
+            instance = createObj(clazz);
+
+            // подготовительное окружение
+            dosBefore();
+
+            try {
+                method.invoke(instance);
+                log.info("Выполнен метод {}", method);
+            } catch (IllegalAccessException e) {
+                log.error("Ошибка выполнения метода {}", method, e);
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                log.error("Ошибка выполнения метода {}", method, e);
+                throw new RuntimeException(e);
+            }
+
+        } catch (RuntimeException e) {
+            log.info("!!! Ошибка при выполнении метода {}", method.getName(), e);
         }
 
         // завершающие операции
-        dosaAfter();
+        if (instance != null) {
+            dosaAfter();
+        }
     }
 
-    void dosBefore() {
+    private void dosBefore() {
         beforeList.stream()
                 .forEach(x -> doBefore(x));
     }
 
-    void doBefore(Method method) {
+    private void doBefore(Method method) {
         try {
             method.invoke(instance);
             log.info("выполнен подготовительный метод {}", method);
         } catch (IllegalAccessException e) {
-            log.error("Ошибка выполнения подготовительного метода {}, {}", method, e);
+            log.error("Ошибка выполнения подготовительного метода {}", method, e);
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            log.error("Ошибка выполнения подготовительного метода {}, {}", method, e);
+            log.error("Ошибка выполнения подготовительного метода {}", method, e);
             throw new RuntimeException(e);
         }
     }
 
-    void dosaAfter() {
+    private void dosaAfter() {
         afterList.stream()
                 .forEach(x -> doAfter(x));
     }
 
-    void doAfter(Method method) {
+    private void doAfter(Method method) {
         try {
             method.invoke(instance);
             log.info("выполнен заключительный метод {}", method);
         } catch (IllegalAccessException e) {
-            log.error("Ошибка выполнения заключительного метода {}, {}", method, e);
+            log.error("Ошибка выполнения заключительного метода {}", method, e);
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            log.error("Ошибка выполнения заключительного метода {}, {}", method, e);
+            log.error("Ошибка выполнения заключительного метода {}", method, e);
             throw new RuntimeException(e);
         }
     }
 
-    List<Method> getMethodsForTest(Class<?> clazz) {
+    private List<Method> getMethodsForTest(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(x -> x.isAnnotationPresent(Test.class))
                 .toList();
     }
 
-    List<Method> getMethodsBefore(Class<?> clazz) {
+    private List<Method> getMethodsBefore(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(x -> x.isAnnotationPresent(Before.class))
                 .toList();
     }
 
-    List<Method> getMethodsAfter(Class<?> clazz) {
+    private List<Method> getMethodsAfter(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(x -> x.isAnnotationPresent(After.class))
                 .toList();
     }
 
-    Object createObj(Class<?> clazz) {
+    private Object createObj(Class<?> clazz) {
         Object instance = null;
 
         Constructor<?>[] constructors = clazz.getConstructors();
@@ -145,9 +152,9 @@ public class MyTestFramework {
         for (Constructor<?> constructor : constructors) {
             try {
                 instance = constructor.newInstance();
-                log.info("Создали инстанс {}", instance);
+                log.info("Создали экземпляр {}", instance);
             } catch (Exception e) {
-                log.error("Ошибка создания инстанса", e);
+                log.error("Ошибка создания экземпляра", e);
             }
         }
 
