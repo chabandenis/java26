@@ -1,26 +1,34 @@
 package ru.otus.hw;
 
+import ru.otus.hw.annotation.After;
+import ru.otus.hw.annotation.Before;
+import ru.otus.hw.annotation.Test;
+
 public class TestMe {
 
-    public void before(){
+    @Before
+    public void before() {
         System.out.println("*** Code of before");
     }
 
-    public void after(){
+    @After
+    public void after() {
         System.out.println("*** Code of after");
     }
 
-
-    public void functionOne(){
-        System.out.println("*** Code of functionOne");
+    @Test
+    public void functionOne() {
+        System.out.println("*** Code of function one");
     }
 
-    public void functionTwo(){
-        System.out.println("*** Code of functionOne");
+    @Test
+    public void functionTwo() {
+        System.out.println("*** Code of function two");
     }
 
-    public void functionThree(){
-        System.out.println("*** Code of functionOne");
+    @Test
+    public void functionThree() {
+        System.out.println("*** Code of function three");
     }
 
     @Override
