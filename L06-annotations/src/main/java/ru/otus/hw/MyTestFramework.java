@@ -21,21 +21,26 @@ public class MyTestFramework {
 
     private static final Logger log = LoggerFactory.getLogger(MyTestFramework.class);
 
-    public void doTest(String className)
-            throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+    public void doTest(String className) {
         log.info("Тестируем класс {}", className);
 
-        var clazz = Class.forName(className);
-
         // инициализация
-        init(clazz);
+        init(className);
 
         // выполнить тестирование
         doTests();
 
     }
 
-    void init(Class<?> clazz) {
+    void init(String aClass) {
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(aClass);
+        } catch (ClassNotFoundException e) {
+            log.error("Ошибка для класса {}, {}", aClass, e);
+            throw new RuntimeException(e);
+        }
+
         // создать экземпляр после тестируемого класса
         instance = createObj(clazz);
 
@@ -58,13 +63,11 @@ public class MyTestFramework {
 
     // обработка тестового метода
     void doTest(Method method) {
+        log.info("======================");
 
         // подготовительное окружение
         dosBefore();
 
-        log.info("Выполняются подготовительные операции {}", beforeList);
-
-        log.info("Выполняется метод {}", method);
         try {
             method.invoke(instance);
             log.info("Выполнен метод {}", method);
@@ -78,7 +81,6 @@ public class MyTestFramework {
 
         // завершающие операции
         dosaAfter();
-
     }
 
     void dosBefore() {
@@ -87,7 +89,6 @@ public class MyTestFramework {
     }
 
     void doBefore(Method method) {
-        log.info("Выполняется подготовительный метод {}", method);
         try {
             method.invoke(instance);
             log.info("выполнен подготовительный метод {}", method);
@@ -100,14 +101,12 @@ public class MyTestFramework {
         }
     }
 
-
     void dosaAfter() {
-        beforeList.stream()
+        afterList.stream()
                 .forEach(x -> doAfter(x));
     }
 
     void doAfter(Method method) {
-        log.info("Выполняется заключительный метод {}", method);
         try {
             method.invoke(instance);
             log.info("выполнен заключительный метод {}", method);
@@ -119,27 +118,6 @@ public class MyTestFramework {
             throw new RuntimeException(e);
         }
     }
-
-
-/*
-
-        for (Method method : methodsForTest) {
-            try {
-                for (Method before : beforeList) {
-                    before.invoke(instance);
-                }
-
-                method.invoke(instance);
-
-                for (Method after : afterList) {
-                    after.invoke(instance);
-                }
-            } catch (Exception e) {
-                log.error("Ошибка при выполнении теста", e);
-            }
-        }
-
- */
 
     List<Method> getMethodsForTest(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredMethods())

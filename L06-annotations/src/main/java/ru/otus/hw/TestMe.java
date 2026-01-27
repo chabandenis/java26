@@ -1,34 +1,37 @@
 package ru.otus.hw;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.hw.annotation.After;
 import ru.otus.hw.annotation.Before;
 import ru.otus.hw.annotation.Test;
 
 public class TestMe {
+    private static final Logger log = LoggerFactory.getLogger(TestMe.class);
 
     @Before
     public void before() {
-        System.out.println("*** Code of before");
+        log.debug("\t\t *** Code of before");
     }
 
     @After
     public void after() {
-        System.out.println("*** Code of after");
+        log.debug("\t\t *** Code of after");
     }
 
     @Test
     public void functionOne() {
-        System.out.println("*** Code of function one");
+        log.debug("\t\t *** Code of function one");
     }
 
     @Test
     public void functionTwo() {
-        System.out.println("*** Code of function two");
+        log.debug("\t\t *** Code of function two");
     }
 
     @Test
     public void functionThree() {
-        System.out.println("*** Code of function three");
+        log.debug("\t\t *** Code of function three");
     }
 
     @Override
