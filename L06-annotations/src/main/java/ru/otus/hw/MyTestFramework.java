@@ -33,7 +33,7 @@ public class MyTestFramework {
         try {
             infoMeta.setClazz(Class.forName(aClass));
         } catch (ClassNotFoundException e) {
-            throw new AppException(e.getMessage());
+            throw new AppException("ClassNotFoundException ", e);
         }
 
         // список методов для тестирования
@@ -90,7 +90,8 @@ public class MyTestFramework {
             method.invoke(infoMeta.getInstance());
             log.info("Выполнен метод {}", method);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage());
+            throw new AppException(
+                    "IllegalAccessException или InvocationTargetException при вызове метода " + method.getName(), e);
         }
     }
 
@@ -103,7 +104,7 @@ public class MyTestFramework {
             method.invoke(instance);
             log.info("выполнен подготовительный метод {}", method);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage());
+            throw new AppException("IllegalAccessException или InvocationTargetException ", e);
         }
     }
 
@@ -116,7 +117,7 @@ public class MyTestFramework {
             method.invoke(instance);
             log.info("выполнен заключительный метод {}", method);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage());
+            throw new AppException("IllegalAccessException или  InvocationTargetException", e);
         }
     }
 
