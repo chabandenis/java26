@@ -1,140 +1,122 @@
 package ru.otus.hw;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.hw.annotation.After;
 import ru.otus.hw.annotation.Before;
 import ru.otus.hw.annotation.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
 public class MyTestFramework {
-
-    private List<Method> beforeList;
-    private List<Method> methodsForTest;
-    private List<Method> afterList;
-    private Object instance;
-    private Class<?> clazz;
-    private Result result = new Result();
 
     private static final Logger log = LoggerFactory.getLogger(MyTestFramework.class);
 
     public void doTest(String className) {
         log.info("Тестируем класс {}", className);
 
-        // инициализация
-        init(className);
-
         // выполнить тестирование
-        doTests();
+        InfoResults infoResults = doTests(
+                // инициализация
+                init(className));
 
         // результаты
-        log.info(result.toString());
-
+        log.info(infoResults.getResultInfo());
     }
 
-    private void init(String aClass) {
-        // обнулить результаты тестов
-        result.clearResult();
+    private InfoMeta init(String aClass) {
+        InfoMeta infoMeta = new InfoMeta();
 
         try {
-            clazz = Class.forName(aClass);
+            infoMeta.setClazz(Class.forName(aClass));
         } catch (ClassNotFoundException e) {
-            log.error("Ошибка для класса {}, {}", aClass, e);
-            throw new RuntimeException(e);
+            throw new AppException(e.getMessage());
         }
 
         // список методов для тестирования
-        methodsForTest = getMethodsForTest(clazz);
+        infoMeta.setMethodsForTest(getMethodsForTest(infoMeta.getClazz()));
 
         // список методов до вызова теста
-        beforeList = getMethodsBefore(clazz);
+        infoMeta.setBeforeList(getMethodsBefore(infoMeta.getClazz()));
 
         // список методов после вызова теста
-        afterList = getMethodsAfter(clazz);
+        infoMeta.setAfterList(getMethodsAfter(infoMeta.getClazz()));
 
+        return infoMeta;
     }
 
     // обработка тестовых методов
-    private void doTests() {
-        methodsForTest.stream()
-                .forEach(x -> doTest(x));
+    private InfoResults doTests(InfoMeta infoMeta) {
+        InfoResults infoResults = new InfoResults();
+
+        infoMeta.getMethodsForTest().stream().forEach(x -> doTest(x, infoMeta, infoResults));
+
+        return infoResults;
     }
 
     // обработка тестового метода
-    private void doTest(Method method) {
+    private void doTest(Method method, InfoMeta infoMeta, InfoResults infoResults) {
         log.info("======================");
 
         try {
             // создать экземпляр после тестируемого класса
-            instance = createObj(clazz);
+            infoMeta.setInstance(createObj(infoMeta.getClazz()));
 
             // подготовительное окружение
-            dosBefore();
+            dosBefore(infoMeta);
 
-            try {
-                method.invoke(instance);
-                log.info("Выполнен метод {}", method);
-            } catch (IllegalAccessException e) {
-                log.error("Ошибка выполнения метода {}", method, e);
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                log.error("Ошибка выполнения метода {}", method, e);
-                throw new RuntimeException(e);
-            }
+            invokeMethod(method, infoMeta);
 
             // успешный тест
-            result.incPassed();
+            infoResults.incPassed();
 
         } catch (RuntimeException e) {
             // ошибочный тест
-            result.incFailed();
+            infoResults.incFailed();
             log.info("!!! Ошибка при выполнении метода {}", method.getName(), e);
         }
 
         // завершающие операции
-        if (instance != null) {
-            dosaAfter();
+        if (infoMeta.getInstance() != null) {
+            dosaAfter(infoMeta);
         }
     }
 
-    private void dosBefore() {
-        beforeList.stream()
-                .forEach(x -> doBefore(x));
+    private static void invokeMethod(Method method, InfoMeta infoMeta) {
+        try {
+            method.invoke(infoMeta.getInstance());
+            log.info("Выполнен метод {}", method);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new AppException(e.getMessage());
+        }
     }
 
-    private void doBefore(Method method) {
+    private void dosBefore(InfoMeta infoMeta) {
+        infoMeta.getBeforeList().stream().forEach(x -> doBefore(x, infoMeta.getInstance()));
+    }
+
+    private void doBefore(Method method, Object instance) {
         try {
             method.invoke(instance);
             log.info("выполнен подготовительный метод {}", method);
-        } catch (IllegalAccessException e) {
-            log.error("Ошибка выполнения подготовительного метода {}", method, e);
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            log.error("Ошибка выполнения подготовительного метода {}", method, e);
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new AppException(e.getMessage());
         }
     }
 
-    private void dosaAfter() {
-        afterList.stream()
-                .forEach(x -> doAfter(x));
+    private void dosaAfter(InfoMeta infoMeta) {
+        infoMeta.getAfterList().stream().forEach(x -> doAfter(x, infoMeta.getInstance()));
     }
 
-    private void doAfter(Method method) {
+    private void doAfter(Method method, Object instance) {
         try {
             method.invoke(instance);
             log.info("выполнен заключительный метод {}", method);
-        } catch (IllegalAccessException e) {
-            log.error("Ошибка выполнения заключительного метода {}", method, e);
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            log.error("Ошибка выполнения заключительного метода {}", method, e);
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new AppException(e.getMessage());
         }
     }
 
@@ -173,36 +155,8 @@ public class MyTestFramework {
         return instance;
     }
 
-    public static void main(String[] args)
-            throws ClassNotFoundException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) {
         MyTestFramework test = new MyTestFramework();
         test.doTest("ru.otus.hw.TestMe");
-    }
-}
-
-class Result {
-    private int passed;
-    private int failed;
-
-    public void incPassed() {
-        this.passed++;
-    }
-
-    public void incFailed() {
-        this.failed++;
-    }
-
-    public void clearResult() {
-        this.failed = 0;
-        this.passed = 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Result {" +
-                "passed=" + passed +
-                ", failed=" + failed +
-                ", total=" + (failed + passed) +
-                '}';
     }
 }
