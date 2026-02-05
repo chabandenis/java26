@@ -12,6 +12,5 @@ public class Demo {
         testLogging.calculation(6);
         testLogging.calculation(7, 8);
         testLogging.calculation(9, 10, "11");
-
     }
 }
