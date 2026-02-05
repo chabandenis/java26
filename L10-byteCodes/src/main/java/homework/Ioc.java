@@ -1,26 +1,24 @@
 package homework;
 
 import annotation.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class Ioc {
     private static final Logger logger = LoggerFactory.getLogger(Ioc.class);
 
-    private Ioc() {
-    }
+    private Ioc() {}
 
     static TestLoggingInterface createMyClass() {
         InvocationHandler handler = new DemoInvocationHandler(new TestLogging());
         return (TestLoggingInterface) Proxy.newProxyInstance(
-                TestLogging.class.getClassLoader(), new Class<?>[]{TestLoggingInterface.class}, handler);
+                TestLogging.class.getClassLoader(), new Class<?>[] {TestLoggingInterface.class}, handler);
     }
 
     static class DemoInvocationHandler implements InvocationHandler {
