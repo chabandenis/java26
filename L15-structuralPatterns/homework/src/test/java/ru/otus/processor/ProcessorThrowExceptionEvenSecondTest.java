@@ -29,9 +29,6 @@ class ProcessorThrowExceptionEvenSecondTest {
             throw new MyException("Выбросить исключение, для проверки теста");
         });
 
-//        var listenerPrinter = new ListenerPrinterConsole();
-//        complexProcessor.addListener(listenerPrinter);
-
         ObjectForMessage objectForMessage = new ObjectForMessage();
         objectForMessage.setData(List.of("Матвей", "Роман"));
 
@@ -51,16 +48,10 @@ class ProcessorThrowExceptionEvenSecondTest {
                 .field13(objectForMessage)
                 .build();
 
-//        while (LocalDateTime.now().getSecond() % 2 != 0) {
-//            //logger.info("Ждем четную секунду");
-//        }
-
         // Проверка выброса исключения
         Assertions.assertThrows(MyException.class, () -> {
             var result = complexProcessor.handle(message);
             logger.info("result:{}", result);
         }, "Ожидается исключение MyException");
-
-
     }
 }

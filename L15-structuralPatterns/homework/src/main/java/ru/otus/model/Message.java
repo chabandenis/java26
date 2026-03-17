@@ -1,5 +1,7 @@
 package ru.otus.model;
 
+import java.util.ArrayList;
+
 @SuppressWarnings({"java:S107", "java:S1135"})
 public class Message {
     private final long id;
@@ -139,6 +141,28 @@ public class Message {
                 + ", field11='" + field11 + '\''
                 + ", field12='" + field12 + '\''
                 + ", field13='" + field13 + '}';
+    }
+
+    public static Message copy(Message message) {
+
+        ObjectForMessage objectForMessage = new ObjectForMessage();
+        objectForMessage.setData(new ArrayList<String>(message.getField13().getData()));
+
+        return new Message(message.getId(),
+                message.getField1() == null ? null : new String(message.getField1()),
+                message.getField2() == null ? null : new String(message.getField2()),
+                message.getField3() == null ? null : new String(message.getField3()),
+                message.getField4() == null ? null : new String(message.getField4()),
+                message.getField5() == null ? null : new String(message.getField5()),
+                message.getField6() == null ? null : new String(message.getField6()),
+                message.getField7() == null ? null : new String(message.getField7()),
+                message.getField8() == null ? null : new String(message.getField8()),
+                message.getField9() == null ? null : new String(message.getField9()),
+                message.getField10() == null ? null : new String(message.getField10()),
+                message.getField11() == null ? null : new String(message.getField11()),
+                message.getField12() == null ? null : new String(message.getField12()),
+                objectForMessage
+        );
     }
 
     public static class Builder {
