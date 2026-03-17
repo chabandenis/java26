@@ -20,7 +20,9 @@ class ProcessorThrowExceptionEvenSecondTest {
     void testProcessorThrowExceptionEvenSecondTest() {
         logger.info("testProcessorThrowExceptionEvenSecondTest");
 
-        List<Processor> processors = List.of(new ProcessorThrowExceptionEvenSecond());
+        List<Processor> processors = List.of(
+                new ProcessorThrowExceptionEvenSecond(() -> LocalDateTime.of(2026, 1, 1, 1, 1, 2)
+                ));
 
         var complexProcessor = new ComplexProcessor(processors, ex -> {
             logger.info(ex.toString());
@@ -49,9 +51,9 @@ class ProcessorThrowExceptionEvenSecondTest {
                 .field13(objectForMessage)
                 .build();
 
-        while (LocalDateTime.now().getSecond() % 2 != 0) {
-            //logger.info("Ждем четную секунду");
-        }
+//        while (LocalDateTime.now().getSecond() % 2 != 0) {
+//            //logger.info("Ждем четную секунду");
+//        }
 
         // Проверка выброса исключения
         Assertions.assertThrows(MyException.class, () -> {

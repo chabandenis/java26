@@ -9,10 +9,15 @@ import java.time.LocalDateTime;
 public class ProcessorThrowExceptionEvenSecond implements Processor {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessorThrowExceptionEvenSecond.class);
+    private final DateTimeProvider dateTimeProvider;
+
+    public ProcessorThrowExceptionEvenSecond(DateTimeProvider dateTimeProvider) {
+        this.dateTimeProvider = dateTimeProvider;
+    }
 
     @Override
     public Message process(Message message) {
-        int seconds = LocalDateTime.now().getSecond();
+        int seconds = dateTimeProvider.getDate().getSecond();
 
         logger.info("Секунды {} ", seconds);
 

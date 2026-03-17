@@ -10,6 +10,7 @@ import ru.otus.processor.Processor;
 import ru.otus.processor.ProcessorChangeFields11And12;
 import ru.otus.processor.ProcessorThrowExceptionEvenSecond;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HomeWork {
@@ -30,11 +31,12 @@ public class HomeWork {
 
     public static void main(String[] args) {
 
-        List<Processor> processors = List.of(new ProcessorChangeFields11And12(), new ProcessorThrowExceptionEvenSecond());
+        List<Processor> processors = List.of(new ProcessorChangeFields11And12(), new ProcessorThrowExceptionEvenSecond(LocalDateTime::now));
 
-        var complexProcessor = new ComplexProcessor(processors, ex -> {
-            logger.error(ex.toString());
-        });
+        var complexProcessor = new ComplexProcessor(processors,
+                ex -> {
+                    logger.error(ex.toString());
+                });
         var listenerPrinter = new ListenerPrinterConsole();
         complexProcessor.addListener(listenerPrinter);
 
