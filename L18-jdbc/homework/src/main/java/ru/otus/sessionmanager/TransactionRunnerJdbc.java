@@ -1,4 +1,4 @@
-package ru.otus.core.sessionmanager;
+package ru.otus.sessionmanager;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;

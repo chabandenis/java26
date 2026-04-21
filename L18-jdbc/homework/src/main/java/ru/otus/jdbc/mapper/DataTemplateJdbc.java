@@ -3,8 +3,8 @@ package ru.otus.jdbc.mapper;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
-import ru.otus.core.repository.DataTemplate;
-import ru.otus.core.repository.executor.DbExecutor;
+import ru.otus.repository.DataTemplate;
+import ru.otus.repository.executor.DbExecutor;
 
 /** Сохраняет объект в базу, читает объект из базы */
 @SuppressWarnings("java:S1068")

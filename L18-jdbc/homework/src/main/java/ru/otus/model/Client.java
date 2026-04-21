@@ -1,7 +1,9 @@
 package ru.otus.model;
 
 public class Client {
+    @IdField
     private Long id;
+
     private String name;
 
     public Client() {}

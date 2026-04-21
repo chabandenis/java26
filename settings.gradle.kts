@@ -9,7 +9,6 @@ include("L12-solid")
 include("L15-structuralPatterns:homework")
 include("L16-io:homework")
 include("L18-jdbc:homework")
-include("L18-jdbc:demo")
 
 
 pluginManagement {

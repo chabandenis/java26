@@ -1,4 +1,4 @@
-package ru.otus.crm.repository;
+package ru.otus.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import ru.otus.core.repository.DataTemplate;
-import ru.otus.core.repository.DataTemplateException;
-import ru.otus.core.repository.executor.DbExecutor;
-import ru.otus.crm.model.Client;
+import ru.otus.model.Client;
+import ru.otus.repository.executor.DbExecutor;
 
 public class ClientDataTemplateJdbc implements DataTemplate<Client> {
 

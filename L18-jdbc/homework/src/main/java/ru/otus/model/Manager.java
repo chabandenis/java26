@@ -1,7 +1,9 @@
 package ru.otus.model;
 
 public class Manager {
+    @IdField
     private Long no;
+
     private String label;
     private String param1;
 

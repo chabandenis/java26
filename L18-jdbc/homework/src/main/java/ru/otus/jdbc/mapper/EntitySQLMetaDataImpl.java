@@ -1,10 +1,9 @@
 package ru.otus.jdbc.mapper;
 
-import ru.otus.crm.model.Client;
+import ru.otus.model.Client;
 
 public class EntitySQLMetaDataImpl implements EntitySQLMetaData {
-    public EntitySQLMetaDataImpl(EntityClassMetaData<Client> entityClassMetaDataClient) {
-    }
+    public EntitySQLMetaDataImpl(EntityClassMetaData<Client> entityClassMetaDataClient) {}
 
     @Override
     public String getSelectAllSql() {
