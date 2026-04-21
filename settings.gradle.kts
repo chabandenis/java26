@@ -1,6 +1,7 @@
 rootProject.name = "otusJava"
 
 include("L01-gradle")
+include("L06-annotations")
 include("L04-generics")
 include("L08-gc:homework")
 include("L10-byteCodes")
