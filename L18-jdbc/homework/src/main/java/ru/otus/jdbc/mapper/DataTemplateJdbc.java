@@ -45,11 +45,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                                     .getEntityClassMetaDataClient()
                                     .getConstructor()
                                     .newInstance();
-                        } catch (InstantiationException e) {
-                            throw new RuntimeException(e);
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        } catch (InvocationTargetException e) {
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             throw new RuntimeException(e);
                         }
 
@@ -65,8 +61,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                                 throw new RuntimeException(e);
                             }
                         }
-
-                        return obj; // new User(rs.getLong("id"), rs.getString("name"));
+                        return obj;
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -76,9 +71,6 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         } catch (Exception e) {
             throw new DataTemplateException(e);
         }
-
-        // "select id, name from client where id  = ?", List.of(id), rs -> {
-        // throw new UnsupportedOperationException();
     }
 
     @Override
