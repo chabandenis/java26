@@ -9,4 +9,6 @@ public interface EntitySQLMetaData<T> {
     String getInsertSql();
 
     String getUpdateSql();
+
+    EntityClassMetaData getEntityClassMetaDataClient();
 }

@@ -1,5 +1,6 @@
 package ru.otus;
 
+import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +14,8 @@ import ru.otus.model.Client;
 import ru.otus.model.Manager;
 import ru.otus.repository.executor.DbExecutorImpl;
 import ru.otus.service.DbServiceClientImpl;
+import ru.otus.service.DbServiceManagerImpl;
 import ru.otus.sessionmanager.TransactionRunnerJdbc;
-
-import javax.sql.DataSource;
 
 @SuppressWarnings({"java:S125", "java:S1481"})
 public class HomeWork {
@@ -49,7 +49,6 @@ public class HomeWork {
         log.info("getInsertSql {}", entitySQLMetaDataClient.getInsertSql());
         log.info("getUpdateSql {}", entitySQLMetaDataClient.getUpdateSql());
 
-
         var dataTemplateClient = new DataTemplateJdbc<Client>(
                 dbExecutor, entitySQLMetaDataClient); // реализация DataTemplate, универсальная
 
@@ -76,7 +75,7 @@ public class HomeWork {
 
         EntitySQLMetaData entitySQLMetaDataManager = new EntitySQLMetaDataImpl(entityClassMetaDataManager);
         var dataTemplateManager = new DataTemplateJdbc<Manager>(dbExecutor, entitySQLMetaDataManager);
-/*
+
         var dbServiceManager = new DbServiceManagerImpl(transactionRunner, dataTemplateManager);
         dbServiceManager.saveManager(new Manager("ManagerFirst"));
 
@@ -85,8 +84,6 @@ public class HomeWork {
                 .getManager(managerSecond.getNo())
                 .orElseThrow(() -> new RuntimeException("Manager not found, id:" + managerSecond.getNo()));
         log.info("managerSecondSelected:{}", managerSecondSelected);
-
- */
     }
 
     private static void flywayMigrations(DataSource dataSource) {

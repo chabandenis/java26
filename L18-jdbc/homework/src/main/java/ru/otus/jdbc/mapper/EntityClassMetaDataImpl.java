@@ -1,12 +1,11 @@
 package ru.otus.jdbc.mapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.otus.model.IdField;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.otus.model.IdField;
 
 /**
  * "Разбирает" объект на составные части
