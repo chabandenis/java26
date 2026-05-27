@@ -1,16 +1,17 @@
 package ru.otus.jdbc.mapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.otus.repository.DataTemplate;
+import ru.otus.repository.DataTemplateException;
+import ru.otus.repository.executor.DbExecutor;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.otus.repository.DataTemplate;
-import ru.otus.repository.DataTemplateException;
-import ru.otus.repository.executor.DbExecutor;
 
 /**
  * Сохраняет объект в базу, читает объект из базы
@@ -52,11 +53,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                         for (Field field : fields) {
                             field.setAccessible(true);
                             try {
-                                field.set(
-                                        obj,
-                                        field.getType() == Long.class
-                                                ? x.getLong(field.getName())
-                                                : x.getString(field.getName()));
+                                field.set(obj, x.getObject(field.getName()));
                             } catch (IllegalAccessException e) {
                                 throw new RuntimeException(e);
                             }

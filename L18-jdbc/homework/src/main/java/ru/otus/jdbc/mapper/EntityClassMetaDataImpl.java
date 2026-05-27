@@ -12,11 +12,13 @@ import ru.otus.model.IdField;
  */
 public class EntityClassMetaDataImpl<T> implements EntityClassMetaData {
     private final Class<T> clazz;
+    private List<Field> allFields;
 
     private static final Logger log = LoggerFactory.getLogger(EntityClassMetaDataImpl.class);
 
     public EntityClassMetaDataImpl(Class<T> clazz) {
         this.clazz = clazz;
+        allFields = getAllFields();
     }
 
     @Override
@@ -35,7 +37,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData {
 
     @Override
     public Field getIdField() {
-        return getAllFields().stream()
+        return allFields.stream()
                 .filter(field -> field.isAnnotationPresent(IdField.class))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Field with IdField annotation not found"));
@@ -48,7 +50,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData {
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return getAllFields().stream()
+        return allFields.stream()
                 .filter(field -> !field.isAnnotationPresent(IdField.class))
                 .toList();
     }
