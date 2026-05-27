@@ -1,0 +1,18 @@
+services:
+
+  postgres:
+    image: "postgres"
+    ports:
+      - "5430:5432"
+    environment:
+      - POSTGRES_USER=usr
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=demoDB
+    networks:
+      - bdnet
+
+networks:
+  bdnet:
+    driver: bridge
+
+
